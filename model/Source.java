@@ -1,7 +1,6 @@
 package model;
 
-public class Article {
-
+public class Source {
     private String author;
     private String title;
     private String description;
