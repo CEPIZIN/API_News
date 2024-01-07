@@ -1,14 +1,15 @@
 package main;
-import model.Article;
-import model.ArticleDescription;
 
 import com.google.gson.Gson;
+import model.ApiResponseDto;
+import model.Article;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.Scanner;
 
 public class mainSearch {
@@ -17,7 +18,7 @@ public class mainSearch {
         System.out.println("Enter your search: ");
         var topic = scr.nextLine();
 
-        String URL = "https://newsapi.org/v2/everything?q=" + topic + "&apiKey=c196de70f8ca483ea848fdf786285e90";
+        String URL = "https://newsapi.org/v2/everything?q="+ topic +"&apiKey=c196de70f8ca483ea848fdf786285e90";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -31,8 +32,9 @@ public class mainSearch {
 
         Gson gson = new Gson();
         System.out.println("como ta vindo");
-        ArticleDescription search = gson.fromJson(json, ArticleDescription.class);
-        System.out.println(search);
+        ApiResponseDto search = new  Gson().fromJson(json, ApiResponseDto.class );
+        List<Article> articles = search.getArticles();
+        System.out.println(articles);
 
     }
 }
