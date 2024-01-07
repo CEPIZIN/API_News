@@ -1,4 +1,6 @@
 package main;
+import model.Article;
+import model.ArticleDescription;
 
 import com.google.gson.Gson;
 
@@ -23,9 +25,14 @@ public class mainSearch {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println(response.body());
+        String json = response.body();
+        System.out.println("json puro da api ");
+        System.out.println(json);
 
         Gson gson = new Gson();
+        System.out.println("como ta vindo");
+        ArticleDescription search = gson.fromJson(json, ArticleDescription.class);
+        System.out.println(search);
 
     }
 }
