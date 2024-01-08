@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import model.ApiResponseDto;
 import model.Article;
 
+import model.Source;
+
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;

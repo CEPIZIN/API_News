@@ -1,6 +1,5 @@
 package model;
 
-
 public record Article(
 
          String title,
@@ -10,4 +9,5 @@ public record Article(
          String publishedAt,
          String content
 ) {
+
 }
