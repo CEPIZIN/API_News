@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import model.ApiResponseDto;
 import model.Article;
 
-import model.Source;
-
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,10 +16,11 @@ import java.util.Scanner;
 public class mainSearch {
     public static void main(String[] args) throws IOException, InterruptedException {
         Scanner scr = new Scanner(System.in);
-        System.out.println("Enter your search: ");
+        System.out.println("Enter you contry : ");
         var topic = scr.nextLine();
 
-        String URL = "https://newsapi.org/v2/everything?q="+ topic +"&apiKey=c196de70f8ca483ea848fdf786285e90";
+        String URL = "https://newsapi.org/v2/top-headlines?country="+ topic +"&apiKey=c196de70f8ca483ea848fdf786285e90";
+
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -30,14 +29,13 @@ public class mainSearch {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         String json = response.body();
-        System.out.println("json puro da api ");
-        System.out.println(json);
 
         Gson gson = new Gson();
-        System.out.println("como ta vindo");
         ApiResponseDto search = new  Gson().fromJson(json, ApiResponseDto.class );
         List<Article> articles = search.getArticles();
-        System.out.println(articles);
+        Article firstArticle = articles.get(0);
+        System.out.println(firstArticle);
+
 
     }
 }

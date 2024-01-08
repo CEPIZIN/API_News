@@ -15,10 +15,3 @@ To use this application, you need to obtain an API key from News API. Follow the
 ``
 https://newsapi.org/v2/everything?q=technology&apiKey=your-api-key
 ``
-
-## New Features 🚀
-In the upcoming features, users will have the ability to:
-
-Receive News Updates via Email: Users will be able to forward the latest news articles directly to their email addresses.
-
-Select News Source: Users can choose their preferred news sources, providing a more personalized news browsing experience.

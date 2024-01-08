@@ -10,4 +10,15 @@ public record Article(
          String content
 ) {
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", urlToImage='" + urlToImage + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
