@@ -12,13 +12,16 @@ public record Article(
 
     @Override
     public String toString() {
-        return "Article{" +
+        return "{" +
                 "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", url='" + url + '\'' +
-                ", urlToImage='" + urlToImage + '\'' +
+                //", description='" + description + '\'' +
+               // ", url='" + url + '\'' +
                 ", publishedAt='" + publishedAt + '\'' +
-                ", content='" + content + '\'' +
                 '}';
+    }
+
+    @Override
+    public String publishedAt() {
+        return publishedAt;
     }
 }
