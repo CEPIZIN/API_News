@@ -9,25 +9,40 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.StringTemplate.STR;
-
 public class mainSearch {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        HashMap<Integer, String> category = new HashMap<>();
+        category.put(1, "business");
+        category.put(2, "entertainment");
+        category.put(3, "health");
+        category.put(4, "sports");
+
+        Scanner scr = new Scanner(System.in);
+
+        System.out.println("Enter your country: ");
+        String country = scr.nextLine();
+
+        System.out.println("Enter your Topic");
+        for (Integer i : category.keySet()) {
+            System.out.println(i + ". " + category.get(i));
+        }
+        int TopicChoice = scr.nextInt();
+        String selectedCategory = category.get(TopicChoice);
+
+        System.out.println("Selected Topic: " + selectedCategory);
+
+        String URL =STR."https://newsapi.org/v2/top-headlines?country=\{country}&category=\{selectedCategory}&apiKey=c196de70f8ca483ea848fdf786285e90";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(URL))
+                .build();
+
         try {
-            Scanner scr = new Scanner(System.in);
-            System.out.println("Enter your country: ");
-            var topic = scr.nextLine();
-
-            String URL =STR."https://newsapi.org/v2/top-headlines?country=\{topic}&apiKey=c196de70f8ca483ea848fdf786285e90" ;
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(URL))
-                    .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
@@ -37,24 +52,19 @@ public class mainSearch {
 
                 List<Article> articles = search.getArticles();
 
-                if (articles.isEmpty())badRequestException();
-
-                for (int i = 0; i < 5 && i < articles.size(); i++) {
-                    System.out.println(articles.get(i).toString());
+                if (articles.isEmpty()) {
+                    System.out.println("No articles found.");
+                } else {
+                    for (int i = 0; i < 5 && i < articles.size(); i++) {
+                        System.out.println(articles.get(i).toString());
+                    }
                 }
 
-            } else if (response.statusCode() ==404) {
-                badRequestException();
             } else {
                 System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
             }
-
-        } catch (Exception  er) {
-            System.out.println("Excepetion" + er.getMessage());
+        } catch (BadRequestException | InterruptedException e) {
+            System.out.println("Error: Invalid request.");
         }
     }
-    private static void  badRequestException(){
-        throw new BadRequestException("Bad request");
-    }
 }
-
