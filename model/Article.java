@@ -19,9 +19,4 @@ public record Article(
                 ", publishedAt='" + publishedAt + '\'' +
                 '}';
     }
-
-    @Override
-    public String publishedAt() {
-        return publishedAt;
-    }
 }

@@ -12,6 +12,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.StringTemplate.STR;
+
 public class mainSearch {
     public static void main(String[] args) {
         try {
@@ -19,7 +21,7 @@ public class mainSearch {
             System.out.println("Enter your country: ");
             var topic = scr.nextLine();
 
-            String URL = "https://newsapi.org/v2/top-headlines?country=" + topic + "&apiKey=c196de70f8ca483ea848fdf786285e90";
+            String URL =STR."https://newsapi.org/v2/top-headlines?country=\{topic}&apiKey=c196de70f8ca483ea848fdf786285e90" ;
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -32,18 +34,27 @@ public class mainSearch {
                 String json = response.body();
                 Gson gson = new Gson();
                 ApiResponseDto search = gson.fromJson(json, ApiResponseDto.class);
+
                 List<Article> articles = search.getArticles();
+
+                if (articles.isEmpty())badRequestException();
 
                 for (int i = 0; i < 5 && i < articles.size(); i++) {
                     System.out.println(articles.get(i).toString());
                 }
+
+            } else if (response.statusCode() ==404) {
+                badRequestException();
             } else {
                 System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
             }
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        } catch (InterruptedException e) {
-            System.err.println("InterruptedException: " + e.getMessage());
+
+        } catch (Exception  er) {
+            System.out.println("Excepetion" + er.getMessage());
         }
     }
+    private static void  badRequestException(){
+        throw new BadRequestException("Bad request");
+    }
 }
+
