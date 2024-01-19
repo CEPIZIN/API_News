@@ -53,18 +53,17 @@ public class mainSearch {
                 List<Article> articles = search.getArticles();
 
                 if (articles.isEmpty()) {
-                    System.out.println("No articles found.");
-                } else {
+                   throw new BadRequestException("nothing");
+                }
                     for (int i = 0; i < 5 && i < articles.size(); i++) {
                         System.out.println(articles.get(i).toString());
                     }
-                }
 
             } else {
                 System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
             }
-        } catch (BadRequestException | InterruptedException e) {
-            System.out.println("Error: Invalid request.");
+        } catch (BadRequestException |InterruptedException err) {
+            System.out.println(err);
         }
     }
 }
