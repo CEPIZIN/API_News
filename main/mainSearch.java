@@ -1,9 +1,12 @@
 package main;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.ApiResponseDto;
 import model.Article;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -47,24 +50,35 @@ public class mainSearch {
 
             if (response.statusCode() == 200) {
                 String json = response.body();
-                Gson gson = new Gson();
+
+
+                Gson gson = new GsonBuilder()
+                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                        .setPrettyPrinting()
+                        .create();
+
                 ApiResponseDto search = gson.fromJson(json, ApiResponseDto.class);
 
                 List<Article> articles = search.getArticles();
 
                 if (articles.isEmpty()) {
-                    System.out.println("No articles found.");
-                } else {
+                   throw new BadRequestException("nothing");
+                }
                     for (int i = 0; i < 5 && i < articles.size(); i++) {
                         System.out.println(articles.get(i).toString());
+
+                        String ToJson = gson.toJson(articles);
+                        FileWriter writer = new FileWriter("My_Articles.json");
+                        writer.write(ToJson);
+                        writer.close();
                     }
-                }
+
 
             } else {
                 System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
             }
-        } catch (BadRequestException | InterruptedException e) {
-            System.out.println("Error: Invalid request.");
+        } catch (BadRequestException |InterruptedException err) {
+            System.out.println(err);
         }
     }
 }

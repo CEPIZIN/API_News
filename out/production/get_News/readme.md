@@ -1,6 +1,6 @@
 ## News API  📰
 
-This application utilizes the News API to retrieve top headlines based on the user's specified country. The News API is a convenient HTTP REST API for accessing real-time articles from various sources on the web.
+This application utilizes the News API to retrieve top headlines based on the user's specified country and the user category. The News API is a convenient HTTP REST API for accessing real-time articles from various sources on the web.
 
 ### Obtaining an API Key🔑
 
@@ -21,4 +21,3 @@ In the upcoming features, users will have the ability to:
 
 Receive News Updates via Email: Users will be able to forward the latest news articles directly to their email addresses.
 
-Select News Source: Users can choose their preferred news sources, providing a more personalized news browsing experience.

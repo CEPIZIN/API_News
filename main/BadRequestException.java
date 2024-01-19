@@ -1,6 +1,6 @@
 package main;
 
-public class BadRequestException extends RuntimeException {
+public class BadRequestException extends NullPointerException {
     public BadRequestException(String message) {
         super(message);
     }
