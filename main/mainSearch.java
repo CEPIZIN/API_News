@@ -72,7 +72,10 @@ public class mainSearch {
                         writer.write(ToJson);
                         writer.close();
                     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 
             } else {
                 System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
