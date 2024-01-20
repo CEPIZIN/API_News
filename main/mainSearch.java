@@ -38,49 +38,31 @@ public class mainSearch {
 
         System.out.println("Selected Topic: " + selectedCategory);
 
-        String URL =STR."https://newsapi.org/v2/top-headlines?country=\{country}&category=\{selectedCategory}&apiKey=c196de70f8ca483ea848fdf786285e90";
+         try {
+            String jsonResponse = NewsApiClient.getNews(country, selectedCategory);
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(URL))
-                .build();
+            Gson gson = new GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .setPrettyPrinting()
+                    .create();
 
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            ApiResponseDto search = gson.fromJson(jsonResponse, ApiResponseDto.class);
+            List<Article> articles = search.getArticles();
 
-            if (response.statusCode() == 200) {
-                String json = response.body();
-
-
-                Gson gson = new GsonBuilder()
-                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                        .setPrettyPrinting()
-                        .create();
-
-                ApiResponseDto search = gson.fromJson(json, ApiResponseDto.class);
-
-                List<Article> articles = search.getArticles();
-
-                if (articles.isEmpty()) {
-                   throw new BadRequestException("nothing");
-                }
-                    for (int i = 0; i < 5 && i < articles.size(); i++) {
-                        System.out.println(articles.get(i).toString());
-
-                        String ToJson = gson.toJson(articles);
-                        FileWriter writer = new FileWriter("My_Articles.json");
-                        writer.write(ToJson);
-                        writer.close();
-                    }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
-
-            } else {
-                System.out.println("Error: Unable to fetch data. HTTP status code: " + response.statusCode());
+            if (articles.isEmpty()) {
+                throw new BadRequestException("o results found for "+selectedCategory+" in " + country);
             }
-        } catch (BadRequestException |InterruptedException err) {
+
+            for (int i = 0; i < 5 && i < articles.size(); i++) {
+                System.out.println(articles.get(i).toString());
+
+                String toJson = gson.toJson(articles);
+                FileWriter writer = new FileWriter("My_Articles.json");
+                writer.write(toJson);
+                writer.close();
+            }
+
+        } catch (BadRequestException | InterruptedException err) {
             System.out.println(err);
         }
     }
