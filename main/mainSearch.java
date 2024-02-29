@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class mainSearch {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+
         HashMap<Integer, String> category = new HashMap<>();
         category.put(1, "business");
         category.put(2, "entertainment");
@@ -33,37 +34,16 @@ public class mainSearch {
         for (Integer i : category.keySet()) {
             System.out.println(i + ". " + category.get(i));
         }
+
         int TopicChoice = scr.nextInt();
         String selectedCategory = category.get(TopicChoice);
 
         System.out.println("Selected Topic: " + selectedCategory);
 
-         try {
-            String jsonResponse = NewsApiClient.getNews(country, selectedCategory);
+        NewsApiClient CallSearch = new NewsApiClient();
+        CallSearch.Response(country,selectedCategory );
 
-            Gson gson = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .setPrettyPrinting()
-                    .create();
 
-            ApiResponseDto search = gson.fromJson(jsonResponse, ApiResponseDto.class);
-            List<Article> articles = search.getArticles();
 
-            if (articles.isEmpty()) {
-                throw new BadRequestException("o results found for "+selectedCategory+" in " + country);
-            }
-
-            for (int i = 0; i < 5 && i < articles.size(); i++) {
-                System.out.println(articles.get(i).toString());
-
-                String toJson = gson.toJson(articles);
-                FileWriter writer = new FileWriter("My_Articles.json");
-                writer.write(toJson);
-                writer.close();
-            }
-
-        } catch (BadRequestException | InterruptedException err) {
-            System.out.println(err);
-        }
     }
 }
